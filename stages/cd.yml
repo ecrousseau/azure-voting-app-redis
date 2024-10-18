@@ -52,6 +52,15 @@ stages:
                   --docker-email=${{ parameters.teamEmail }} \
                   --namespace=${{ parameters.kubernetesNamespace }}
           - task: Kubernetes@1
+            displayName: Create namespace
+            inputs:
+              connectionType: Azure Resource Manager
+              azureSubscriptionEndpoint: ${{ parameters.serviceConnection }}
+              azureResourceGroup: ${{ parameters.resourceGroup }}
+              kubernetesCluster: ${{ parameters.aksCluster }}
+              command: create
+              arguments: namespace azure-vote
+          - task: Kubernetes@1
             displayName: Apply manifest
             inputs:
               connectionType: Azure Resource Manager
