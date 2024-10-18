@@ -26,7 +26,7 @@ stages:
     - task: AzureCLI@2
       displayName: Log in to ACR
       inputs:
-        azureSubscription: ${{ parameters.serviceConnection }}
+        azureSubscription: azure-service-connection #${{ parameters.serviceConnection }}
         scriptType: bash
         scriptLocation: inlineScript
         inlineScript: |
