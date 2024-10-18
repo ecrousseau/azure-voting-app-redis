@@ -35,4 +35,4 @@ stages:
         kubernetesCluster: ${{ parameters.aksCluster }}
         namespace: azure-vote
         command: apply
-        arguments: -f $(dependencies.CI.outputs['BuildAndPush.value'])"
+        arguments: -f $(stageDependencies.CI.BuildAndPush.outputs['ManifestName.value'])"
