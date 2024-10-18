@@ -7,10 +7,10 @@ parameters:
 #get artifact
 #create imagepullsecret
 #deploy, overriding container
-dependsOn: CI
 
 stages:
 - stage: CD
+  dependsOn: CI
   jobs:
   - job: Deploy
     steps:
