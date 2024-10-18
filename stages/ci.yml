@@ -12,24 +12,26 @@ parameters:
 #generate manifest, renamed to voteapp_<buildid>_<datetime> per above
 #add manifest to artifacts
 
-jobs:
-- job: Tests
-  steps:
-  - bash: |
-      echo "Run tests here"
-- job: BuildAndPush
-  steps:
-  - task: Docker@2
-    displayName: 'Build and push front-end image to ACR'
-    inputs:
-      containerRegistry: ${{ parameters.containerRegistry }}
-      repository: azure-vote
-      dockerfile: azure-vote/Dockerfile
-      command: buildAndPush
-      tags: |
-        $(Build.BuildId)
-  - name: ManifestName
-    bash: |
-      echo "##vso[task.setvariable variable=value;isoutput=true]voteapp_$(Build.BuildId)_$()"
-  - publish: azure-vote-all-in-one-redis.yaml
-    artifact: Manifest
+stages:
+- stage: CI
+  jobs:
+  - job: Tests
+    steps:
+    - bash: |
+        echo "Run tests here"
+  - job: BuildAndPush
+    steps:
+    - task: Docker@2
+      displayName: 'Build and push front-end image to ACR'
+      inputs:
+        containerRegistry: ${{ parameters.containerRegistry }}
+        repository: azure-vote
+        dockerfile: azure-vote/Dockerfile
+        command: buildAndPush
+        tags: |
+          $(Build.BuildId)
+    - name: ManifestName
+      bash: |
+        echo "##vso[task.setvariable variable=value;isoutput=true]voteapp_$(Build.BuildId)_$()"
+    - publish: azure-vote-all-in-one-redis.yaml
+      artifact: Manifest
