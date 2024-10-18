@@ -8,9 +8,9 @@ stages:
   parameters:
     resourceGroup: ${{ variables.resourceGroup }}
     containerRegistry: ${{ variables.containerRegistry }}
-    serviceConnection: $${{ variables.serviceConnection }}
+    serviceConnection: ${{ variables.serviceConnection }}
 - template: stages/cd.yml
   parameters:
     resourceGroup: ${{ variables.resourceGroup }}
     aksCluster: ${{ variables.aksCluster }}
-    serviceConnection: $${{ variables.serviceConnection }}
+    serviceConnection: ${{ variables.serviceConnection }}
