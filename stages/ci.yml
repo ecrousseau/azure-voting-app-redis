@@ -23,15 +23,6 @@ stages:
         echo "Run tests here"
   - job: BuildAndPush
     steps:
-    - task: AzureCLI@2
-      displayName: Log in to ACR
-      inputs:
-        azureSubscription: azure-service-connection #${{ parameters.serviceConnection }}
-        scriptType: bash
-        scriptLocation: inlineScript
-        inlineScript: |
-          az acr login --name ${{ parameters.containerRegistry }}
-
     - task: Docker@2
       displayName: Build and push to ACR
       inputs:
