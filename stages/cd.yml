@@ -35,22 +35,22 @@ stages:
               ls
               ls *
               ls *\*
-          - task: AzureCLI@2
-            displayName: Get AKS and ACR credentials
-            inputs:
-              azureSubscription: ${{ parameters.serviceConnection }}
-              scriptType: bash
-              scriptLocation: inlineScript
-              inlineScript: |
-                az aks get-credentials --resource-group ${{ parameters.resourceGroup }} --name ${{ parameters.aksCluster }}
-                acrUsername=$(az acr credential show --name ${{ parameters.containerRegistry }} --query username --output tsv)
-                acrPassword=$(az acr credential show --name ${{ parameters.containerRegistry }} --query passwords[0].value --output tsv)
-                kubectl create secret docker-registry image-pull-secret \
-                  --docker-server=${{ parameters.containerRegistry }} \
-                  --docker-username=$acrUsername \
-                  --docker-password=$acrPassword \
-                  --docker-email=${{ parameters.teamEmail }} \
-                  --namespace=${{ parameters.kubernetesNamespace }}
+          #- task: AzureCLI@2
+          #  displayName: Get AKS and ACR credentials
+          #  inputs:
+          #    azureSubscription: ${{ parameters.serviceConnection }}
+          #    scriptType: bash
+          #    scriptLocation: inlineScript
+          #    inlineScript: |
+          #      az aks get-credentials --resource-group ${{ parameters.resourceGroup }} --name ${{ parameters.aksCluster }}
+          #      acrUsername=$(az acr credential show --name ${{ parameters.containerRegistry }} --query username --output tsv)
+          #      acrPassword=$(az acr credential show --name ${{ parameters.containerRegistry }} --query passwords[0].value --output tsv)
+          #      kubectl create secret docker-registry image-pull-secret \
+          #        --docker-server=${{ parameters.containerRegistry }} \
+          #        --docker-username=$acrUsername \
+          #        --docker-password=$acrPassword \
+          #        --docker-email=${{ parameters.teamEmail }} \
+          #        --namespace=${{ parameters.kubernetesNamespace }}
           - task: Kubernetes@1
             displayName: Create namespace
             inputs:
@@ -70,3 +70,9 @@ stages:
               namespace: azure-vote
               command: apply
               arguments: -f $(manifestName)
+              secretType: dockerRegistry
+              containerRegistryType: Azure Container Registry
+              azureSubscriptionEndpointForSecrets: ${{ parameters.serviceConnection }}
+              azureContainerRegistry: ${{ parameters.containerRegistry }}
+              secretName: image-pull-secret
+              forceUpdate: true
