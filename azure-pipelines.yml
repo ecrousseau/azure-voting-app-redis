@@ -6,11 +6,16 @@ variables:
 stages:
 - template: stages/ci.yml
   parameters:
+    serviceConnection: ${{ variables.serviceConnection }}
     resourceGroup: ${{ variables.resourceGroup }}
     containerRegistry: ${{ variables.containerRegistry }}
-    serviceConnection: ${{ variables.serviceConnection }}
+    containerRepository: ${{ variables.containerRepository }}
 - template: stages/cd.yml
   parameters:
+    serviceConnection: ${{ variables.serviceConnection }}
     resourceGroup: ${{ variables.resourceGroup }}
     aksCluster: ${{ variables.aksCluster }}
-    serviceConnection: ${{ variables.serviceConnection }}
+    kubernetesNamespace: ${{ variables.kubernetesNamespace }}
+    containerRegistry: ${{ variables.containerRegistry }}
+    containerRepository: ${{ variables.containerRepository }}
+    teamEmail: ${{ variables.teamEmail }}

@@ -2,4 +2,7 @@ variables:
   serviceConnection: azure-service-connection
   resourceGroup: rg-lbg-voteapp-test-uks
   containerRegistry: 3ejvbkrz9pfgs7ms.azurecr.io
+  containerRepository: azure-vote
   aksCluster: aks-lbg-voteapp-test-uks
+  teamEmail: team@company.com
+  kubernetesNamespace: azure-vote

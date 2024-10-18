@@ -6,14 +6,6 @@ parameters:
 - name: serviceConnection
   type: string
 
-#docker build
-#use $(Build.BuildId)
-#push
-#generate string for manifest name -> setvariable
-  #format: voteapp_<buildid>_<datetime>
-#generate manifest, renamed to voteapp_<buildid>_<datetime> per above
-#add manifest to artifacts
-
 stages:
 - stage: CI
   jobs:
@@ -22,13 +14,13 @@ stages:
     - pwsh: |
         Write-Output "Run tests here"
   - job: BuildAndPush
-    dependsOn: Tests  # because we can't run parallel jobs for free
+    dependsOn: Tests
     steps:
     - task: Docker@2
       displayName: Build and push to ACR
       inputs:
         containerRegistry: ${{ parameters.containerRegistry }}
-        repository: azure-vote
+        repository: ${{ parameters.containerRepository }}
         dockerfile: azure-vote/Dockerfile
         command: buildAndPush
         tags: |
