@@ -22,6 +22,7 @@ stages:
     - bash: |
         echo "Run tests here"
   - job: BuildAndPush
+    dependsOn: Tests  # because we can't run parallel jobs for free
     steps:
     - task: Docker@2
       displayName: Build and push to ACR
