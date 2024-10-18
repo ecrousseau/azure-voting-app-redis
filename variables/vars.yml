@@ -1,4 +1,5 @@
 variables:
+  serviceConnection: azure-service-connection
   resourceGroup: rg-lbg-voteapp-test-uks
-  containerRegistry: cr-lbg-voteapp-test-uks
+  containerRegistry: 3ejvbkrz9pfgs7ms
   aksCluster: aks-lbg-voteapp-test-uks

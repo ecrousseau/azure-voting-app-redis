@@ -3,6 +3,8 @@ parameters:
   type: string
 - name: containerRegistry
   type: string
+- name: serviceConnection
+  type: string
 
 #docker build
 #use $(Build.BuildId)

@@ -3,6 +3,8 @@ parameters:
   type: string
 - name: aksCluster
   type: string
+- name: serviceConnection
+  type: string
   
 #get artifact
 #create imagepullsecret
@@ -19,7 +21,7 @@ stages:
     - task: AzureCLI@2
       displayName: Get AKS credentials
       inputs:
-        azureSubscription: foo
+        azureSubscription: ${{ parameters.serviceConnection }}
         scriptType: bash
         scriptLocation: inlineScript
         inlineScript: |
@@ -28,7 +30,7 @@ stages:
       displayName: Deploy to AKS
       inputs:
         connectionType: Azure Resource Manager
-        azureSubscription: foo
+        azureSubscription: ${{ parameters.serviceConnection }}
         azureResourceGroup: ${{ parameters.resourceGroup }}
         kubernetesCluster: ${{ parameters.aksCluster }}
         namespace: azure-vote
