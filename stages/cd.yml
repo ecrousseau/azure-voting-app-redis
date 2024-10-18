@@ -15,9 +15,15 @@ stages:
   dependsOn: CI
   jobs:
   - job: Deploy
+    variables:
+      manifestName: $[ stageDependencies.CI.BuildAndPush.outputs['ManifestName.value'] ]
     steps:
     - download: current
       artifact: Manifest
+    - pwsh: |
+        ls
+        ls *
+        ls *\*
     #- task: AzureCLI@2
     #  displayName: Get AKS credentials
     #  inputs:
@@ -35,4 +41,4 @@ stages:
         kubernetesCluster: ${{ parameters.aksCluster }}
         namespace: azure-vote
         command: apply
-        arguments: -f $(stageDependencies.CI.BuildAndPush.outputs['ManifestName.value'])"
+        arguments: -f $(manifestName)
