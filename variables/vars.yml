@@ -1,0 +1,4 @@
+variables:
+  resourceGroup: rg-lbg-voteapp-test-uks
+  containerRegistry: cr-lbg-voteapp-test-uks
+  aksCluster: aks-lbg-voteapp-test-uks

@@ -1,0 +1,32 @@
+parameters:
+- name: resourceGroup
+  type: string
+- name: aksCluster
+  type: string
+  
+#get artifact
+#create imagepullsecret
+#deploy, overriding container
+jobs:
+- job: Deploy
+  steps:
+  - download: current
+    artifact: Manifest
+  - task: AzureCLI@2
+    displayName: Get AKS credentials
+    inputs:
+      azureSubscription: foo
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        az aks get-credentials --resource-group $(RESOURCE_GROUP) --name $(AKS_CLUSTER_NAME)
+  - task: Kubernetes@1
+    displayName: Deploy to AKS
+    inputs:
+      connectionType: Azure Resource Manager
+      azureSubscription: foo
+      azureResourceGroup: ${{ parameters.resourceGroup }}
+      kubernetesCluster: ${{ parameters.askCluster }}
+      namespace: azure-vote
+      command: apply
+      arguments: -f $(manifestName)

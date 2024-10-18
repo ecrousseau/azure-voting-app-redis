@@ -1,0 +1,19 @@
+name: azure-voting-app-redis
+trigger:
+- main
+variables:
+- template: variables/vars.yml
+stages:
+- stage: CI
+  template: stages/ci.yml
+  parameters:
+    resourceGroup: ${{ variables.resourceGroup }}
+    containerRegistry: ${{ variables.containerRegistry }}
+- stage: CD
+  template: stages/cd.yml
+  dependsOn: CI
+  parameters:
+    resourceGroup: ${{ variables.resourceGroup }}
+    aksCluster: ${{ variables.aksCluster }}
+  variables:
+    manifestName: $[stageDependencies.CI.BuildAndPush.outputs['ManifestName.value']]
