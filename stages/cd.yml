@@ -20,6 +20,7 @@ stages:
     steps:
     - download: current
       artifact: Manifest
+      patterns: '**/*.yaml'
     - pwsh: |
         ls
         ls *
