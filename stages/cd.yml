@@ -30,7 +30,7 @@ stages:
       displayName: Deploy to AKS
       inputs:
         connectionType: Azure Resource Manager
-        azureSubscription: ${{ parameters.serviceConnection }}
+        azureSubscriptionEndpoint: ${{ parameters.serviceConnection }}
         azureResourceGroup: ${{ parameters.resourceGroup }}
         kubernetesCluster: ${{ parameters.aksCluster }}
         namespace: azure-vote
