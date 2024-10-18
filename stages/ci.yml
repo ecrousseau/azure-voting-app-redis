@@ -19,7 +19,7 @@ stages:
   jobs:
   - job: Tests
     steps:
-    - bash: |
+    - pwsh: |
         echo "Run tests here"
   - job: BuildAndPush
     dependsOn: Tests  # because we can't run parallel jobs for free
@@ -33,9 +33,9 @@ stages:
         command: buildAndPush
         tags: |
           $(Build.BuildId)
-    - bash: |
-        timestamp=$(date +%Y%m%d%H%M%S)
-        echo "##vso[task.setvariable variable=value;isoutput=true]voteapp_$(Build.BuildId)_$timestamp"
+    - pwsh: |
+        $timestamp = Get-Date -Format "yyyyMMddHHmmss"
+        Write-Output "##vso[task.setvariable variable=value;isoutput=true]voteapp_$(Build.BuildId)_$timestamp"
       name: ManifestName
     - publish: azure-vote-all-in-one-redis.yaml
       artifact: Manifest
