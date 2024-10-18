@@ -18,14 +18,14 @@ stages:
     steps:
     - download: current
       artifact: Manifest
-    - task: AzureCLI@2
-      displayName: Get AKS credentials
-      inputs:
-        azureSubscription: ${{ parameters.serviceConnection }}
-        scriptType: bash
-        scriptLocation: inlineScript
-        inlineScript: |
-          az aks get-credentials --resource-group $(RESOURCE_GROUP) --name $(AKS_CLUSTER_NAME)
+    #- task: AzureCLI@2
+    #  displayName: Get AKS credentials
+    #  inputs:
+    #    azureSubscription: ${{ parameters.serviceConnection }}
+    #    scriptType: bash
+    #    scriptLocation: inlineScript
+    #    inlineScript: |
+    #      az aks get-credentials --resource-group $(RESOURCE_GROUP) --name $(AKS_CLUSTER_NAME)
     - task: Kubernetes@1
       displayName: Deploy to AKS
       inputs:
