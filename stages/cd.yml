@@ -5,8 +5,6 @@ parameters:
   type: string
 - name: serviceConnection
   type: string
-- name: teamEmail
-  type: string
 - name: containerRegistry
   type: string
 - name: containerRepository
@@ -31,35 +29,10 @@ stages:
       runOnce:
         deploy:
           steps:
-          - pwsh: |  # imagepull secret, override container and secret
-              ls
-              ls *
-              ls *\*
-          #- task: AzureCLI@2
-          #  displayName: Get AKS and ACR credentials
-          #  inputs:
-          #    azureSubscription: ${{ parameters.serviceConnection }}
-          #    scriptType: bash
-          #    scriptLocation: inlineScript
-          #    inlineScript: |
-          #      az aks get-credentials --resource-group ${{ parameters.resourceGroup }} --name ${{ parameters.aksCluster }}
-          #      acrUsername=$(az acr credential show --name ${{ parameters.containerRegistry }} --query username --output tsv)
-          #      acrPassword=$(az acr credential show --name ${{ parameters.containerRegistry }} --query passwords[0].value --output tsv)
-          #      kubectl create secret docker-registry image-pull-secret \
-          #        --docker-server=${{ parameters.containerRegistry }} \
-          #        --docker-username=$acrUsername \
-          #        --docker-password=$acrPassword \
-          #        --docker-email=${{ parameters.teamEmail }} \
-          #        --namespace=${{ parameters.kubernetesNamespace }}
-          - task: Kubernetes@1
-            displayName: Create namespace
-            inputs:
-              connectionType: Azure Resource Manager
-              azureSubscriptionEndpoint: ${{ parameters.serviceConnection }}
-              azureResourceGroup: ${{ parameters.resourceGroup }}
-              kubernetesCluster: ${{ parameters.aksCluster }}
-              command: create
-              arguments: namespace azure-vote
+          - pwsh: |
+              yq 'select(.kind != "Deployment" or .metadata.name != "azure-vote-front")' $(manifestName) > temp.yaml
+              Write-Output "---" >> temp.yaml
+              yq 'select(.kind == "Deployment" and .metadata.name == "azure-vote-front") | .spec.template.spec.containers[0].image = "${{ parameters.containerRegistry }}/${{ parameters.containerRepository }}:$(Build.BuildId)" | .spec.template.spec.imagePullSecrets[0] = {"name": "image-pull-secret"}' $(manifestName) >> temp.yaml
           - task: Kubernetes@1
             displayName: Apply manifest
             inputs:
@@ -67,9 +40,9 @@ stages:
               azureSubscriptionEndpoint: ${{ parameters.serviceConnection }}
               azureResourceGroup: ${{ parameters.resourceGroup }}
               kubernetesCluster: ${{ parameters.aksCluster }}
-              namespace: azure-vote
+              namespace: ${{ parameters.kubernetesNamespace }}
               command: apply
-              arguments: -f $(manifestName)
+              arguments: -f temp.yaml
               secretType: dockerRegistry
               containerRegistryType: Azure Container Registry
               azureSubscriptionEndpointForSecrets: ${{ parameters.serviceConnection }}

@@ -1,11 +1,7 @@
 parameters:
-- name: resourceGroup
-  type: string
 - name: containerRegistry
   type: string
 - name: containerRepository
-  type: string
-- name: serviceConnection
   type: string
 
 stages:
