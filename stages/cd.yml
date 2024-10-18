@@ -7,6 +7,7 @@ parameters:
 #get artifact
 #create imagepullsecret
 #deploy, overriding container
+dependsOn: CI
 
 stages:
 - stage: CD
@@ -32,4 +33,4 @@ stages:
         kubernetesCluster: ${{ parameters.askCluster }}
         namespace: azure-vote
         command: apply
-        arguments: -f $(manifestName)
+        arguments: -f $(dependencies.CI.outputs['BuildAndPush.value'])"

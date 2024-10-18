@@ -9,9 +9,6 @@ stages:
     resourceGroup: ${{ variables.resourceGroup }}
     containerRegistry: ${{ variables.containerRegistry }}
 - template: stages/cd.yml
-  dependsOn: CI
   parameters:
     resourceGroup: ${{ variables.resourceGroup }}
     aksCluster: ${{ variables.aksCluster }}
-  variables:
-    manifestName: $[stageDependencies.CI.BuildAndPush.outputs['ManifestName.value']]
