@@ -1,7 +1,7 @@
 parameters:
 - name: resourceGroup
   type: string
-- name: aksCluster
+- name: containerRegistry
   type: string
 
 #docker build
