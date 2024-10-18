@@ -35,7 +35,9 @@ stages:
           $(Build.BuildId)
     - pwsh: |
         $timestamp = Get-Date -Format "yyyyMMddHHmmss"
-        Write-Output "##vso[task.setvariable variable=value;isoutput=true]voteapp_$(Build.BuildId)_$timestamp"
+        $manifestName = "voteapp_$(Build.BuildId)_$timestamp.yaml"
+        Copy-Item azure-vote-all-in-one-redis.yaml $manifestName
+        Write-Output "##vso[task.setvariable variable=value;isoutput=true]$manifestName"
       name: ManifestName
-    - publish: azure-vote-all-in-one-redis.yaml
+    - publish: $(ManifestName.value)
       artifact: Manifest
