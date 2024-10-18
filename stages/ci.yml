@@ -20,7 +20,7 @@ stages:
   - job: Tests
     steps:
     - pwsh: |
-        echo "Run tests here"
+        Write-Output "Run tests here"
   - job: BuildAndPush
     dependsOn: Tests  # because we can't run parallel jobs for free
     steps:
